@@ -1,0 +1,724 @@
+[2026-10-27T13:12:56.899+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-10-27T13:12:56.924+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ecommerce_end_to_end_etl.load_to_gold manual__2026-10-27T13:07:43+00:00 [queued]>
+[2026-10-27T13:12:56.937+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ecommerce_end_to_end_etl.load_to_gold manual__2026-10-27T13:07:43+00:00 [queued]>
+[2026-10-27T13:12:56.938+0000] {taskinstance.py:2865} INFO - Starting attempt 2 of 2
+[2026-10-27T13:12:56.954+0000] {taskinstance.py:2888} INFO - Executing <Task(PythonOperator): load_to_gold> on 2026-10-27 13:07:43+00:00
+[2026-10-27T13:12:56.963+0000] {standard_task_runner.py:72} INFO - Started process 444 to run task
+[2026-10-27T13:12:56.966+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ecommerce_end_to_end_etl', 'load_to_gold', 'manual__2026-10-27T13:07:43+00:00', '--job-id', '11', '--raw', '--subdir', 'DAGS_FOLDER/ecommerce_etl_dag.py', '--cfg-path', '/tmp/tmpgoulx9m4']
+[2026-10-27T13:12:56.968+0000] {standard_task_runner.py:105} INFO - Job 11: Subtask load_to_gold
+[2026-10-27T13:12:57.011+0000] {task_command.py:467} INFO - Running <TaskInstance: ecommerce_end_to_end_etl.load_to_gold manual__2026-10-27T13:07:43+00:00 [running]> on host 62171febff95
+[2026-10-27T13:12:57.086+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='data_team@example.com' AIRFLOW_CTX_DAG_OWNER='data_engineer' AIRFLOW_CTX_DAG_ID='ecommerce_end_to_end_etl' AIRFLOW_CTX_TASK_ID='load_to_gold' AIRFLOW_CTX_EXECUTION_DATE='2026-10-27T13:07:43+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-27T13:07:43+00:00'
+[2026-10-27T13:12:57.086+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-10-27T13:12:57.099+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:12:57 [info     ] Loading Dimension: dim_products... run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:12:57.127+0000] {logging_mixin.py:190} WARNING - /opt/***/src/load.py:21 UserWarning: pandas only supports SQLAlchemy connectable (engine/connection) or database string URI or sqlite3 DBAPI2 connection. Other DBAPI2 objects are not tested. Please consider using SQLAlchemy.
+[2026-10-27T13:12:58.216+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:12:57 [error    ] load_to_gold_failed            run_id=manual__2026-10-27T13:07:43+00:00
+╭─────────────────────────────── Traceback (most recent call last) ────────────────────────────────╮
+│ /opt/***/src/load.py:60 in load_to_gold                                                      │
+│                                                                                                  │
+│    57 │   │   # Nạp các bảng Dimension trước                                                     │
+│    58 │   │   log.info("Loading Dimension: dim_products...")                                     │
+│    59 │   │   products_df = pl.read_parquet(f"{SILVER_DIR}/dim_products.parquet")                │
+│ ❱  60 │   │   upsert_table(engine, products_df, "dim_products", "gold", ["product_id"])          │
+│    61 │   │                                                                                      │
+│    62 │   │   log.info("Loading Dimension: dim_sellers...")                                      │
+│    63 │   │   sellers_df = pl.read_parquet(f"{SILVER_DIR}/dim_sellers.parquet")                  │
+│                                                                                                  │
+│ ╭─────────────────────────────────────────── locals ───────────────────────────────────────────╮ │
+│ │      db_url = 'postgresql+psycopg2://admin:password@datamart:5432/ecommerce'                 │ │
+│ │           e = AttributeError("'Engine' object has no attribute 'cursor'")                    │ │
+│ │      engine = Engine(postgresql+psycopg2://admin:***@datamart:5432/ecommerce)                │ │
+│ │      kwargs = {                                                                              │ │
+│ │               │   'conf': <***.configuration.AirflowConfigParser object at               │ │
+│ │               0x7937647001c0>,                                                               │ │
+│ │               │   'dag': <DAG: ecommerce_end_to_end_etl>,                                    │ │
+│ │               │   'dag_run': <DagRun ecommerce_end_to_end_etl @ 2026-10-27 13:07:43+00:00:   │ │
+│ │               manual__2026-10-27T13:07:43+00:00, state:running, queued_at: 2026-10-27        │ │
+│ │               13:07:43.281420+00:00. externally triggered: True>,                            │ │
+│ │               │   'data_interval_end': DateTime(2026, 10, 27, 0, 0, 0,                       │ │
+│ │               tzinfo=Timezone('UTC')),                                                       │ │
+│ │               │   'data_interval_start': DateTime(2026, 10, 26, 0, 0, 0,                     │ │
+│ │               tzinfo=Timezone('UTC')),                                                       │ │
+│ │               │   'outlet_events': <***.utils.context.OutletEventAccessors object at     │ │
+│ │               0x7937403a8c70>,                                                               │ │
+│ │               │   'ds': '2026-10-27',                                                        │ │
+│ │               │   'ds_nodash': '20261027',                                                   │ │
+│ │               │   'execution_date': <Proxy at 0x7937403afd40 wrapping DateTime(2026, 10, 27, │ │
+│ │               13, 7, 43, tzinfo=Timezone('UTC')) at 0x793740592de0 with factory              │ │
+│ │               functools.partial(<function                                                    │ │
+│ │               lazy_mapping_from_context.<locals>._deprecated_proxy_factory at                │ │
+│ │               0x793740583ac0>, 'execution_date', DateTime(2026, 10, 27, 13, 7, 43,           │ │
+│ │               tzinfo=Timezone('UTC')))>,                                                     │ │
+│ │               │   'expanded_ti_count': None,                                                 │ │
+│ │               │   ... +35                                                                    │ │
+│ │               }                                                                              │ │
+│ │         log = <BoundLoggerFilteringAtNotset(context={'run_id':                               │ │
+│ │               'manual__2026-10-27T13:07:43+00:00'}, processors=[<function merge_contextvars  │ │
+│ │               at 0x79375ad2c280>, <function add_log_level at 0x79375ad2d090>,                │ │
+│ │               <structlog.processors.StackInfoRenderer object at 0x79375b14e710>, <function   │ │
+│ │               set_exc_info at 0x79375ad99870>, <structlog.processors.TimeStamper object at   │ │
+│ │               0x79375ad9e8c0>, <structlog.dev.ConsoleRenderer object at 0x79375e8940d0>])>   │ │
+│ │ products_df = shape: (32_951, 9)                                                             │ │
+│ │               ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬… │ │
+│ │               │ product_i ┆ product_c ┆ product_n ┆ product_d ┆ … ┆ product_w ┆ product_l ┆  │ │
+│ │               product_h ┆ product_ │                                                         │ │
+│ │               │ d         ┆ ategory_n ┆ ame_lengt ┆ escriptio ┆   ┆ eight_g   ┆ ength_cm  ┆  │ │
+│ │               eight_cm  ┆ width_cm │                                                         │ │
+│ │               │ ---       ┆ ame_engli ┆ h         ┆ n_length  ┆   ┆ ---       ┆ ---       ┆  │ │
+│ │               ---       ┆ ---      │                                                         │ │
+│ │               │ str       ┆ sh        ┆ ---       ┆ ---       ┆   ┆ i64       ┆ i64       ┆  │ │
+│ │               i64       ┆ i64      │                                                         │ │
+│ │               │           ┆ ---       ┆ i64       ┆ i64       ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │           ┆ str       ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪… │ │
+│ │               │ 669386709 ┆ auto      ┆ 47        ┆ 295       ┆ … ┆ 1500      ┆ 18        ┆  │ │
+│ │               27        ┆ 15       │                                                         │ │
+│ │               │ be2cc2fc8 ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 0d31077bd ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 43f…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ c8c969c3a ┆ bed_bath_ ┆ 52        ┆ 662       ┆ … ┆ 550       ┆ 28        ┆  │ │
+│ │               4         ┆ 22       │                                                         │ │
+│ │               │ 6423f48df ┆ table     ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 9fde8a13e ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 677…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 0fb817c33 ┆ auto      ┆ 27        ┆ 209       ┆ … ┆ 100       ┆ 16        ┆  │ │
+│ │               2         ┆ 16       │                                                         │ │
+│ │               │ 4895944db ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 8933eac77 ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ bbc…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ ea3214a6e ┆ watches_g ┆ 56        ┆ 705       ┆ … ┆ 650       ┆ 16        ┆  │ │
+│ │               12        ┆ 12       │                                                         │ │
+│ │               │ ab15e1e4c ┆ ifts      ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 9c21932e7 ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 4b6…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 33102eb20 ┆ construct ┆ 59        ┆ 950       ┆ … ┆ 1550      ┆ 37        ┆  │ │
+│ │               7         ┆ 24       │                                                         │ │
+│ │               │ d41ceb406 ┆ ion_tools ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ b2083a3fd ┆ _construc ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ e8d…      ┆ tio…      ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ …         ┆ …         ┆ …         ┆ …         ┆ … ┆ …         ┆ …         ┆  │ │
+│ │               …         ┆ …        │                                                         │ │
+│ │               │ 13c091cf8 ┆ garden_to ┆ 27        ┆ 834       ┆ … ┆ 8767      ┆ 47        ┆  │ │
+│ │               64        ┆ 38       │                                                         │ │
+│ │               │ ce1e5e8d6 ┆ ols       ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ dac6ad263 ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 888…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ ad673c1cd ┆ computers ┆ 39        ┆ 1321      ┆ … ┆ 350       ┆ 22        ┆  │ │
+│ │               11        ┆ 17       │                                                         │ │
+│ │               │ 02b966e93 ┆ _accessor ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 1f9db4fdc ┆ ies       ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 347…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ fb3d9b25b ┆ health_be ┆ 52        ┆ 2460      ┆ … ┆ 775       ┆ 18        ┆  │ │
+│ │               19        ┆ 15       │                                                         │ │
+│ │               │ 111fc87a8 ┆ auty      ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 68c07e664 ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 89c…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ f196248e8 ┆ auto      ┆ 58        ┆ 1167      ┆ … ┆ 1900      ┆ 90        ┆  │ │
+│ │               14        ┆ 18       │                                                         │ │
+│ │               │ b5d060cca ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 414a664ea ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 9a7…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ d4dccae17 ┆ houseware ┆ 59        ┆ 474       ┆ … ┆ 3070      ┆ 32        ┆  │ │
+│ │               11        ┆ 29       │                                                         │ │
+│ │               │ c83ffbaaf ┆ s         ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ c50d76350 ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               │ 3e9…      ┆           ┆           ┆           ┆   ┆           ┆           ┆  │ │
+│ │               ┆          │                                                                   │ │
+│ │               └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴… │ │
+│ │      run_id = <DagRun ecommerce_end_to_end_etl @ 2026-10-27 13:07:43+00:00:                  │ │
+│ │               manual__2026-10-27T13:07:43+00:00, state:running, queued_at: 2026-10-27        │ │
+│ │               13:07:43.281420+00:00. externally triggered: True>                             │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│                                                                                                  │
+│ /opt/***/src/load.py:21 in upsert_table                                                      │
+│                                                                                                  │
+│    18 │   temp_table = f"temp_{table_name}"                                                      │
+│    19 │                                                                                          │
+│    20 │   # Đẩy DataFrame vào bảng tạm                                                           │
+│ ❱  21 │   pdf.to_sql(temp_table, con=engine, schema=schema, if_exists="replace", index=False)    │
+│    22 │                                                                                          │
+│    23 │   cols = [f'"{c}"' for c in pdf.columns]                                                 │
+│    24 │   cols_str = ", ".join(cols)                                                             │
+│                                                                                                  │
+│ ╭─────────────────────────────────────────── locals ───────────────────────────────────────────╮ │
+│ │         df = shape: (32_951, 9)                                                              │ │
+│ │              ┌───────────┬───────────┬───────────┬───────────┬───┬───────────┬───────────┬─… │ │
+│ │              │ product_i ┆ product_c ┆ product_n ┆ product_d ┆ … ┆ product_w ┆ product_l ┆   │ │
+│ │              product_h ┆ product_ │                                                          │ │
+│ │              │ d         ┆ ategory_n ┆ ame_lengt ┆ escriptio ┆   ┆ eight_g   ┆ ength_cm  ┆   │ │
+│ │              eight_cm  ┆ width_cm │                                                          │ │
+│ │              │ ---       ┆ ame_engli ┆ h         ┆ n_length  ┆   ┆ ---       ┆ ---       ┆   │ │
+│ │              ---       ┆ ---      │                                                          │ │
+│ │              │ str       ┆ sh        ┆ ---       ┆ ---       ┆   ┆ i64       ┆ i64       ┆   │ │
+│ │              i64       ┆ i64      │                                                          │ │
+│ │              │           ┆ ---       ┆ i64       ┆ i64       ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │           ┆ str       ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              ╞═══════════╪═══════════╪═══════════╪═══════════╪═══╪═══════════╪═══════════╪═… │ │
+│ │              │ 669386709 ┆ auto      ┆ 47        ┆ 295       ┆ … ┆ 1500      ┆ 18        ┆   │ │
+│ │              27        ┆ 15       │                                                          │ │
+│ │              │ be2cc2fc8 ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 0d31077bd ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 43f…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ c8c969c3a ┆ bed_bath_ ┆ 52        ┆ 662       ┆ … ┆ 550       ┆ 28        ┆ 4 │ │
+│ │              ┆ 22       │                                                                    │ │
+│ │              │ 6423f48df ┆ table     ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 9fde8a13e ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 677…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 0fb817c33 ┆ auto      ┆ 27        ┆ 209       ┆ … ┆ 100       ┆ 16        ┆ 2 │ │
+│ │              ┆ 16       │                                                                    │ │
+│ │              │ 4895944db ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 8933eac77 ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ bbc…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ ea3214a6e ┆ watches_g ┆ 56        ┆ 705       ┆ … ┆ 650       ┆ 16        ┆   │ │
+│ │              12        ┆ 12       │                                                          │ │
+│ │              │ ab15e1e4c ┆ ifts      ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 9c21932e7 ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 4b6…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 33102eb20 ┆ construct ┆ 59        ┆ 950       ┆ … ┆ 1550      ┆ 37        ┆ 7 │ │
+│ │              ┆ 24       │                                                                    │ │
+│ │              │ d41ceb406 ┆ ion_tools ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ b2083a3fd ┆ _construc ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ e8d…      ┆ tio…      ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ …         ┆ …         ┆ …         ┆ …         ┆ … ┆ …         ┆ …         ┆ … │ │
+│ │              ┆ …        │                                                                    │ │
+│ │              │ 13c091cf8 ┆ garden_to ┆ 27        ┆ 834       ┆ … ┆ 8767      ┆ 47        ┆   │ │
+│ │              64        ┆ 38       │                                                          │ │
+│ │              │ ce1e5e8d6 ┆ ols       ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ dac6ad263 ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 888…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ ad673c1cd ┆ computers ┆ 39        ┆ 1321      ┆ … ┆ 350       ┆ 22        ┆   │ │
+│ │              11        ┆ 17       │                                                          │ │
+│ │              │ 02b966e93 ┆ _accessor ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 1f9db4fdc ┆ ies       ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 347…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ fb3d9b25b ┆ health_be ┆ 52        ┆ 2460      ┆ … ┆ 775       ┆ 18        ┆   │ │
+│ │              19        ┆ 15       │                                                          │ │
+│ │              │ 111fc87a8 ┆ auty      ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 68c07e664 ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 89c…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ f196248e8 ┆ auto      ┆ 58        ┆ 1167      ┆ … ┆ 1900      ┆ 90        ┆   │ │
+│ │              14        ┆ 18       │                                                          │ │
+│ │              │ b5d060cca ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 414a664ea ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 9a7…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ d4dccae17 ┆ houseware ┆ 59        ┆ 474       ┆ … ┆ 3070      ┆ 32        ┆   │ │
+│ │              11        ┆ 29       │                                                          │ │
+│ │              │ c83ffbaaf ┆ s         ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ c50d76350 ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              │ 3e9…      ┆           ┆           ┆           ┆   ┆           ┆           ┆   │ │
+│ │              ┆          │                                                                    │ │
+│ │              └───────────┴───────────┴───────────┴───────────┴───┴───────────┴───────────┴─… │ │
+│ │     engine = Engine(postgresql+psycopg2://admin:***@datamart:5432/ecommerce)                 │ │
+│ │        pdf = │   │   │   │   │   │   │    product_id  ... product_width_cm                   │ │
+│ │              0      669386709be2cc2fc80d31077bd43f2f  ...               15                   │ │
+│ │              1      c8c969c3a6423f48df9fde8a13e6770b  ...               22                   │ │
+│ │              2      0fb817c334895944db8933eac77bbc0a  ...               16                   │ │
+│ │              3      ea3214a6eab15e1e4c9c21932e74b607  ...               12                   │ │
+│ │              4      33102eb20d41ceb406b2083a3fde8d29  ...               24                   │ │
+│ │              ...                                 ...  ...              ...                   │ │
+│ │              32946  13c091cf8ce1e5e8d6dac6ad263888cd  ...               38                   │ │
+│ │              32947  ad673c1cd02b966e931f9db4fdc34791  ...               17                   │ │
+│ │              32948  fb3d9b25b111fc87a868c07e66489cae  ...               15                   │ │
+│ │              32949  f196248e8b5d060cca414a664ea9a76f  ...               18                   │ │
+│ │              32950  d4dccae17c83ffbaafc50d763503e9eb  ...               29                   │ │
+│ │                                                                                              │ │
+│ │              [32951 rows x 9 columns]                                                        │ │
+│ │ pk_columns = ['product_id']                                                                  │ │
+│ │     schema = 'gold'                                                                          │ │
+│ │ table_name = 'dim_products'                                                                  │ │
+│ │ temp_table = 'temp_dim_products'                                                             │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/util/_decorators.py:333 in wrapper      │
+│                                                                                                  │
+│   330 │   │   │   │   │   FutureWarning,                                                         │
+│   331 │   │   │   │   │   stacklevel=find_stack_level(),                                         │
+│   332 │   │   │   │   )                                                                          │
+│ ❱ 333 │   │   │   return func(*args, **kwargs)                                                   │
+│   334 │   │                                                                                      │
+│   335 │   │   # error: "Callable[[VarArg(Any), KwArg(Any)], Any]" has no                         │
+│   336 │   │   # attribute "__signature__"                                                        │
+│                                                                                                  │
+│ ╭─────────────────────────────────────────── locals ───────────────────────────────────────────╮ │
+│ │     allow_args = ['self', 'name', 'con']                                                     │ │
+│ │           args = (                                                                           │ │
+│ │                  │   │   │   │   │   │   │   │    product_id  ... product_width_cm           │ │
+│ │                  0      669386709be2cc2fc80d31077bd43f2f  ...               15               │ │
+│ │                  1      c8c969c3a6423f48df9fde8a13e6770b  ...               22               │ │
+│ │                  2      0fb817c334895944db8933eac77bbc0a  ...               16               │ │
+│ │                  3      ea3214a6eab15e1e4c9c21932e74b607  ...               12               │ │
+│ │                  4      33102eb20d41ceb406b2083a3fde8d29  ...               24               │ │
+│ │                  ...                                 ...  ...              ...               │ │
+│ │                  32946  13c091cf8ce1e5e8d6dac6ad263888cd  ...               38               │ │
+│ │                  32947  ad673c1cd02b966e931f9db4fdc34791  ...               17               │ │
+│ │                  32948  fb3d9b25b111fc87a868c07e66489cae  ...               15               │ │
+│ │                  32949  f196248e8b5d060cca414a664ea9a76f  ...               18               │ │
+│ │                  32950  d4dccae17c83ffbaafc50d763503e9eb  ...               29               │ │
+│ │                                                                                              │ │
+│ │                  [32951 rows x 9 columns],                                                   │ │
+│ │                  │   'temp_dim_products'                                                     │ │
+│ │                  )                                                                           │ │
+│ │           func = <function NDFrame.to_sql at 0x793740ea08b0>                                 │ │
+│ │         kwargs = {                                                                           │ │
+│ │                  │   'con': Engine(postgresql+psycopg2://admin:***@datamart:5432/ecommerce), │ │
+│ │                  │   'schema': 'gold',                                                       │ │
+│ │                  │   'if_exists': 'replace',                                                 │ │
+│ │                  │   'index': False                                                          │ │
+│ │                  }                                                                           │ │
+│ │            msg = 'Starting with pandas version 3.0 all arguments of to_sql{arguments} will   │ │
+│ │                  be keyw'+9                                                                  │ │
+│ │ num_allow_args = 3                                                                           │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/core/generic.py:3087 in to_sql          │
+│                                                                                                  │
+│    3084 │   │   """  # noqa: E501                                                                │
+│    3085 │   │   from pandas.io import sql                                                        │
+│    3086 │   │                                                                                    │
+│ ❱  3087 │   │   return sql.to_sql(                                                               │
+│    3088 │   │   │   self,                                                                        │
+│    3089 │   │   │   name,                                                                        │
+│    3090 │   │   │   con,                                                                         │
+│                                                                                                  │
+│ ╭─────────────────────────────────────────── locals ───────────────────────────────────────────╮ │
+│ │   chunksize = None                                                                           │ │
+│ │         con = Engine(postgresql+psycopg2://admin:***@datamart:5432/ecommerce)                │ │
+│ │       dtype = None                                                                           │ │
+│ │   if_exists = 'replace'                                                                      │ │
+│ │       index = False                                                                          │ │
+│ │ index_label = None                                                                           │ │
+│ │      method = None                                                                           │ │
+│ │        name = 'temp_dim_products'                                                            │ │
+│ │      schema = 'gold'                                                                         │ │
+│ │        self = │   │   │   │   │   │   │    product_id  ... product_width_cm                  │ │
+│ │               0      669386709be2cc2fc80d31077bd43f2f  ...               15                  │ │
+│ │               1      c8c969c3a6423f48df9fde8a13e6770b  ...               22                  │ │
+│ │               2      0fb817c334895944db8933eac77bbc0a  ...               16                  │ │
+│ │               3      ea3214a6eab15e1e4c9c21932e74b607  ...               12                  │ │
+│ │               4      33102eb20d41ceb406b2083a3fde8d29  ...               24                  │ │
+│ │               ...                                 ...  ...              ...                  │ │
+│ │               32946  13c091cf8ce1e5e8d6dac6ad263888cd  ...               38                  │ │
+│ │               32947  ad673c1cd02b966e931f9db4fdc34791  ...               17                  │ │
+│ │               32948  fb3d9b25b111fc87a868c07e66489cae  ...               15                  │ │
+│ │               32949  f196248e8b5d060cca414a664ea9a76f  ...               18                  │ │
+│ │               32950  d4dccae17c83ffbaafc50d763503e9eb  ...               29                  │ │
+│ │                                                                                              │ │
+│ │               [32951 rows x 9 columns]                                                       │ │
+│ │         sql = <module 'pandas.io.sql' from                                                   │ │
+│ │               '/home/***/.local/lib/python3.10/site-packages/pandas/io/sql.py'>          │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/io/sql.py:842 in to_sql                 │
+│                                                                                                  │
+│    839 │   │   )                                                                                 │
+│    840 │                                                                                         │
+│    841 │   with pandasSQL_builder(con, schema=schema, need_transaction=True) as pandas_sql:      │
+│ ❱  842 │   │   return pandas_sql.to_sql(                                                         │
+│    843 │   │   │   frame,                                                                        │
+│    844 │   │   │   name,                                                                         │
+│    845 │   │   │   if_exists=if_exists,                                                          │
+│                                                                                                  │
+│ ╭──────────────────────────────────── locals ─────────────────────────────────────╮              │
+│ │     chunksize = None                                                            │              │
+│ │           con = Engine(postgresql+psycopg2://admin:***@datamart:5432/ecommerce) │              │
+│ │         dtype = None                                                            │              │
+│ │        engine = 'auto'                                                          │              │
+│ │ engine_kwargs = {}                                                              │              │
+│ │         frame = │   │   │   │   │   │   │    product_id  ... product_width_cm   │              │
+│ │                 0      669386709be2cc2fc80d31077bd43f2f  ...               15   │              │
+│ │                 1      c8c969c3a6423f48df9fde8a13e6770b  ...               22   │              │
+│ │                 2      0fb817c334895944db8933eac77bbc0a  ...               16   │              │
+│ │                 3      ea3214a6eab15e1e4c9c21932e74b607  ...               12   │              │
+│ │                 4      33102eb20d41ceb406b2083a3fde8d29  ...               24   │              │
+│ │                 ...                                 ...  ...              ...   │              │
+│ │                 32946  13c091cf8ce1e5e8d6dac6ad263888cd  ...               38   │              │
+│ │                 32947  ad673c1cd02b966e931f9db4fdc34791  ...               17   │              │
+│ │                 32948  fb3d9b25b111fc87a868c07e66489cae  ...               15   │              │
+│ │                 32949  f196248e8b5d060cca414a664ea9a76f  ...               18   │              │
+│ │                 32950  d4dccae17c83ffbaafc50d763503e9eb  ...               29   │              │
+│ │                                                                                 │              │
+│ │                 [32951 rows x 9 columns]                                        │              │
+│ │     if_exists = 'replace'                                                       │              │
+│ │         index = False                                                           │              │
+│ │   index_label = None                                                            │              │
+│ │        method = None                                                            │              │
+│ │          name = 'temp_dim_products'                                             │              │
+│ │    pandas_sql = <pandas.io.sql.SQLiteDatabase object at 0x79372b914130>         │              │
+│ │        schema = 'gold'                                                          │              │
+│ ╰─────────────────────────────────────────────────────────────────────────────────╯              │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/io/sql.py:2850 in to_sql                │
+│                                                                                                  │
+│   2847 │   │   │   index_label=index_label,                                                      │
+│   2848 │   │   │   dtype=dtype,                                                                  │
+│   2849 │   │   )                                                                                 │
+│ ❱ 2850 │   │   table.create()                                                                    │
+│   2851 │   │   return table.insert(chunksize, method)                                            │
+│   2852 │                                                                                         │
+│   2853 │   def has_table(self, name: str, schema: str | None = None) -> bool:                    │
+│                                                                                                  │
+│ ╭─────────────────────────────────── locals ────────────────────────────────────╮                │
+│ │     chunksize = None                                                          │                │
+│ │         dtype = None                                                          │                │
+│ │        engine = 'auto'                                                        │                │
+│ │ engine_kwargs = {}                                                            │                │
+│ │         frame = │   │   │   │   │   │   │    product_id  ... product_width_cm │                │
+│ │                 0      669386709be2cc2fc80d31077bd43f2f  ...               15 │                │
+│ │                 1      c8c969c3a6423f48df9fde8a13e6770b  ...               22 │                │
+│ │                 2      0fb817c334895944db8933eac77bbc0a  ...               16 │                │
+│ │                 3      ea3214a6eab15e1e4c9c21932e74b607  ...               12 │                │
+│ │                 4      33102eb20d41ceb406b2083a3fde8d29  ...               24 │                │
+│ │                 ...                                 ...  ...              ... │                │
+│ │                 32946  13c091cf8ce1e5e8d6dac6ad263888cd  ...               38 │                │
+│ │                 32947  ad673c1cd02b966e931f9db4fdc34791  ...               17 │                │
+│ │                 32948  fb3d9b25b111fc87a868c07e66489cae  ...               15 │                │
+│ │                 32949  f196248e8b5d060cca414a664ea9a76f  ...               18 │                │
+│ │                 32950  d4dccae17c83ffbaafc50d763503e9eb  ...               29 │                │
+│ │                                                                               │                │
+│ │                 [32951 rows x 9 columns]                                      │                │
+│ │     if_exists = 'replace'                                                     │                │
+│ │         index = False                                                         │                │
+│ │   index_label = None                                                          │                │
+│ │        method = None                                                          │                │
+│ │          name = 'temp_dim_products'                                           │                │
+│ │        schema = 'gold'                                                        │                │
+│ │          self = <pandas.io.sql.SQLiteDatabase object at 0x79372b914130>       │                │
+│ │         table = <pandas.io.sql.SQLiteTable object at 0x79372b9152d0>          │                │
+│ ╰───────────────────────────────────────────────────────────────────────────────╯                │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/io/sql.py:984 in create                 │
+│                                                                                                  │
+│    981 │   │   │   self.table.create(bind=self.pd_sql.con)                                       │
+│    982 │                                                                                         │
+│    983 │   def create(self) -> None:                                                             │
+│ ❱  984 │   │   if self.exists():                                                                 │
+│    985 │   │   │   if self.if_exists == "fail":                                                  │
+│    986 │   │   │   │   raise ValueError(f"Table '{self.name}' already exists.")                  │
+│    987 │   │   │   if self.if_exists == "replace":                                               │
+│                                                                                                  │
+│ ╭────────────────────────── locals ───────────────────────────╮                                  │
+│ │ self = <pandas.io.sql.SQLiteTable object at 0x79372b9152d0> │                                  │
+│ ╰─────────────────────────────────────────────────────────────╯                                  │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/io/sql.py:970 in exists                 │
+│                                                                                                  │
+│    967 │   │   │   raise ValueError("Empty table name specified")                                │
+│    968 │                                                                                         │
+│    969 │   def exists(self):                                                                     │
+│ ❱  970 │   │   return self.pd_sql.has_table(self.name, self.schema)                              │
+│    971 │                                                                                         │
+│    972 │   def sql_schema(self) -> str:                                                          │
+│    973 │   │   from sqlalchemy.schema import CreateTable                                         │
+│                                                                                                  │
+│ ╭────────────────────────── locals ───────────────────────────╮                                  │
+│ │ self = <pandas.io.sql.SQLiteTable object at 0x79372b9152d0> │                                  │
+│ ╰─────────────────────────────────────────────────────────────╯                                  │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/io/sql.py:2865 in has_table             │
+│                                                                                                  │
+│   2862 │   │   │   AND name={wld};                                                               │
+│   2863 │   │   """                                                                               │
+│   2864 │   │                                                                                     │
+│ ❱ 2865 │   │   return len(self.execute(query, [name]).fetchall()) > 0                            │
+│   2866 │                                                                                         │
+│   2867 │   def get_table(self, table_name: str, schema: str | None = None) -> None:              │
+│   2868 │   │   return None  # not supported in fallback mode                                     │
+│                                                                                                  │
+│ ╭─────────────────────────────────────────── locals ───────────────────────────────────────────╮ │
+│ │   name = 'temp_dim_products'                                                                 │ │
+│ │  query = '\n        SELECT\n            name\n        FROM\n            sqlite_master\n      │ │
+│ │          '+76                                                                                │ │
+│ │ schema = None                                                                                │ │
+│ │   self = <pandas.io.sql.SQLiteDatabase object at 0x79372b914130>                             │ │
+│ │    wld = '?'                                                                                 │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────╯ │
+│                                                                                                  │
+│ /home/***/.local/lib/python3.10/site-packages/pandas/io/sql.py:2672 in execute               │
+│                                                                                                  │
+│   2669 │   │   if not isinstance(sql, str):                                                      │
+│   2670 │   │   │   raise TypeError("Query must be a string unless using sqlalchemy.")            │
+│   2671 │   │   args = [] if params is None else [params]                                         │
+│ ❱ 2672 │   │   cur = self.con.cursor()                                                           │
+│   2673 │   │   try:                                                                              │
+│   2674 │   │   │   cur.execute(sql, *args)                                                       │
+│   2675 │   │   │   return cur                                                                    │
+│                                                                                                  │
+│ ╭─────────────────────────────────────────── locals ───────────────────────────────────────────╮ │
+│ │   args = [['temp_dim_products']]                                                             │ │
+│ │ params = ['temp_dim_products']                                                               │ │
+│ │   self = <pandas.io.sql.SQLiteDatabase object at 0x79372b914130>                             │ │
+│ │    sql = '\n        SELECT\n            name\n        FROM\n            sqlite_master\n      │ │
+│ │          '+76                                                                                │ │
+│ ╰──────────────────────────────────────────────────────────────────────────────────────────────╯ │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+AttributeError: 'Engine' object has no attribute 'cursor'
+[2026-10-27T13:12:58.216+0000] {taskinstance.py:3310} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/opt/airflow/src/load.py", line 116, in load_to_gold
+    raise e
+  File "/opt/airflow/src/load.py", line 60, in load_to_gold
+    upsert_table(engine, products_df, "dim_products", "gold", ["product_id"])
+  File "/opt/airflow/src/load.py", line 21, in upsert_table
+    pdf.to_sql(temp_table, con=engine, schema=schema, if_exists="replace", index=False)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/core/generic.py", line 3087, in to_sql
+    return sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 842, in to_sql
+    return pandas_sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2850, in to_sql
+    table.create()
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 984, in create
+    if self.exists():
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 970, in exists
+    return self.pd_sql.has_table(self.name, self.schema)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2865, in has_table
+    return len(self.execute(query, [name]).fetchall()) > 0
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2672, in execute
+    cur = self.con.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+[2026-10-27T13:12:58.222+0000] {taskinstance.py:1225} INFO - Marking task as FAILED. dag_id=ecommerce_end_to_end_etl, task_id=load_to_gold, run_id=manual__2026-10-27T13:07:43+00:00, execution_date=20261027T130743, start_date=20261027T131256, end_date=20261027T131258
+[2026-10-27T13:12:58.231+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.10/site-packages/***/utils/email.py:155 RemovedInAirflow3Warning: Fetching SMTP credentials from configuration variables will be deprecated in a future release. Please set credentials using a connection instead.
+[2026-10-27T13:12:58.232+0000] {configuration.py:1058} WARNING - section/key [smtp/smtp_user] not found in config
+[2026-10-27T13:12:58.232+0000] {email.py:272} INFO - Email alerting: attempt 1
+[2026-10-27T13:12:58.236+0000] {configuration.py:1058} WARNING - section/key [smtp/smtp_user] not found in config
+[2026-10-27T13:12:58.237+0000] {email.py:272} INFO - Email alerting: attempt 1
+[2026-10-27T13:12:58.237+0000] {taskinstance.py:1234} ERROR - Failed to send email to: ['data_team@example.com']
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 273, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 3158, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 3182, in _execute_task
+    return _execute_task(self, context, task_orig)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/opt/airflow/src/load.py", line 116, in load_to_gold
+    raise e
+  File "/opt/airflow/src/load.py", line 60, in load_to_gold
+    upsert_table(engine, products_df, "dim_products", "gold", ["product_id"])
+  File "/opt/airflow/src/load.py", line 21, in upsert_table
+    pdf.to_sql(temp_table, con=engine, schema=schema, if_exists="replace", index=False)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/core/generic.py", line 3087, in to_sql
+    return sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 842, in to_sql
+    return pandas_sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2850, in to_sql
+    table.create()
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 984, in create
+    if self.exists():
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 970, in exists
+    return self.pd_sql.has_table(self.name, self.schema)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2865, in has_table
+    return len(self.execute(query, [name]).fetchall()) > 0
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2672, in execute
+    cur = self.con.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 1442, in _email_alert
+    send_email(task.email, subject, html_content)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 80, in send_email
+    return backend(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 155, in send_email_smtp
+    send_mime_email(e_from=mail_from, e_to=recipients, mime_msg=msg, conn_id=conn_id, dryrun=dryrun)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 274, in send_mime_email
+    smtp_conn = _get_smtp_connection(smtp_host, smtp_port, smtp_timeout, smtp_ssl)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 318, in _get_smtp_connection
+    return smtplib.SMTP(host=host, port=port, timeout=timeout)
+  File "/usr/local/lib/python3.10/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/local/lib/python3.10/smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/local/lib/python3.10/smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+  File "/usr/local/lib/python3.10/socket.py", line 857, in create_connection
+    raise err
+  File "/usr/local/lib/python3.10/socket.py", line 845, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 1232, in _handle_failure
+    task_instance.email_alert(error, failure_context["task"])
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 3604, in email_alert
+    _email_alert(task_instance=self, exception=exception, task=task)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 1444, in _email_alert
+    send_email(task.email, subject, html_content_err)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 80, in send_email
+    return backend(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 155, in send_email_smtp
+    send_mime_email(e_from=mail_from, e_to=recipients, mime_msg=msg, conn_id=conn_id, dryrun=dryrun)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 274, in send_mime_email
+    smtp_conn = _get_smtp_connection(smtp_host, smtp_port, smtp_timeout, smtp_ssl)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/email.py", line 318, in _get_smtp_connection
+    return smtplib.SMTP(host=host, port=port, timeout=timeout)
+  File "/usr/local/lib/python3.10/smtplib.py", line 255, in __init__
+    (code, msg) = self.connect(host, port)
+  File "/usr/local/lib/python3.10/smtplib.py", line 341, in connect
+    self.sock = self._get_socket(host, port, self.timeout)
+  File "/usr/local/lib/python3.10/smtplib.py", line 312, in _get_socket
+    return socket.create_connection((host, port), timeout,
+  File "/usr/local/lib/python3.10/socket.py", line 857, in create_connection
+    raise err
+  File "/usr/local/lib/python3.10/socket.py", line 845, in create_connection
+    sock.connect(sa)
+ConnectionRefusedError: [Errno 111] Connection refused
+[2026-10-27T13:12:58.251+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-10-27T13:12:58.252+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 11 for task load_to_gold ('Engine' object has no attribute 'cursor'; 444)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/cli.py", line 115, in wrapper
+    return f(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 3004, in _run_raw_task
+    return _run_raw_task(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 273, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 3158, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 3182, in _execute_task
+    return _execute_task(self, context, task_orig)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 767, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/taskinstance.py", line 733, in _execute_callable
+    return ExecutionCallableRunner(
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/models/baseoperator.py", line 406, in wrapper
+    return func(self, *args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+  File "/opt/airflow/src/load.py", line 116, in load_to_gold
+    raise e
+  File "/opt/airflow/src/load.py", line 60, in load_to_gold
+    upsert_table(engine, products_df, "dim_products", "gold", ["product_id"])
+  File "/opt/airflow/src/load.py", line 21, in upsert_table
+    pdf.to_sql(temp_table, con=engine, schema=schema, if_exists="replace", index=False)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/util/_decorators.py", line 333, in wrapper
+    return func(*args, **kwargs)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/core/generic.py", line 3087, in to_sql
+    return sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 842, in to_sql
+    return pandas_sql.to_sql(
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2850, in to_sql
+    table.create()
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 984, in create
+    if self.exists():
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 970, in exists
+    return self.pd_sql.has_table(self.name, self.schema)
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2865, in has_table
+    return len(self.execute(query, [name]).fetchall()) > 0
+  File "/home/airflow/.local/lib/python3.10/site-packages/pandas/io/sql.py", line 2672, in execute
+    cur = self.con.cursor()
+AttributeError: 'Engine' object has no attribute 'cursor'
+[2026-10-27T13:12:58.300+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2026-10-27T13:12:58.332+0000] {taskinstance.py:3900} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-10-27T13:12:58.339+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

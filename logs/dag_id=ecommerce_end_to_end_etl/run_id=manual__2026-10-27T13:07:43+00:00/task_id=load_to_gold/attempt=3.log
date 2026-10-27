@@ -1,0 +1,30 @@
+[2026-10-27T13:16:04.393+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-10-27T13:16:04.419+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: ecommerce_end_to_end_etl.load_to_gold manual__2026-10-27T13:07:43+00:00 [queued]>
+[2026-10-27T13:16:04.436+0000] {taskinstance.py:2612} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: ecommerce_end_to_end_etl.load_to_gold manual__2026-10-27T13:07:43+00:00 [queued]>
+[2026-10-27T13:16:04.436+0000] {taskinstance.py:2865} INFO - Starting attempt 3 of 4
+[2026-10-27T13:16:04.452+0000] {taskinstance.py:2888} INFO - Executing <Task(PythonOperator): load_to_gold> on 2026-10-27 13:07:43+00:00
+[2026-10-27T13:16:04.461+0000] {standard_task_runner.py:72} INFO - Started process 511 to run task
+[2026-10-27T13:16:04.465+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'ecommerce_end_to_end_etl', 'load_to_gold', 'manual__2026-10-27T13:07:43+00:00', '--job-id', '13', '--raw', '--subdir', 'DAGS_FOLDER/ecommerce_etl_dag.py', '--cfg-path', '/tmp/tmpql5z1cnp']
+[2026-10-27T13:16:04.467+0000] {standard_task_runner.py:105} INFO - Job 13: Subtask load_to_gold
+[2026-10-27T13:16:04.524+0000] {task_command.py:467} INFO - Running <TaskInstance: ecommerce_end_to_end_etl.load_to_gold manual__2026-10-27T13:07:43+00:00 [running]> on host 62171febff95
+[2026-10-27T13:16:04.614+0000] {taskinstance.py:3131} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='data_team@example.com' AIRFLOW_CTX_DAG_OWNER='data_engineer' AIRFLOW_CTX_DAG_ID='ecommerce_end_to_end_etl' AIRFLOW_CTX_TASK_ID='load_to_gold' AIRFLOW_CTX_EXECUTION_DATE='2026-10-27T13:07:43+00:00' AIRFLOW_CTX_TRY_NUMBER='3' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-10-27T13:07:43+00:00'
+[2026-10-27T13:16:04.616+0000] {taskinstance.py:731} INFO - ::endgroup::
+[2026-10-27T13:16:04.636+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:04 [info     ] Loading Dimension: dim_products... run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:16:05.839+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:05 [info     ] Upserted 32951 rows into gold.dim_products
+[2026-10-27T13:16:05.841+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:05 [info     ] Loading Dimension: dim_sellers... run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:16:05.926+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:05 [info     ] Upserted 3095 rows into gold.dim_sellers
+[2026-10-27T13:16:05.927+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:05 [info     ] Loading Dimension: dim_customers... run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:16:29.862+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:29 [info     ] Upserted 99441 rows into gold.dim_customers
+[2026-10-27T13:16:29.926+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:29 [info     ] Loading Fact: fct_order_items... run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:16:53.967+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:53 [info     ] Upserted 112642 rows into gold.fct_order_items
+[2026-10-27T13:16:53.987+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:53 [info     ] Loading Fact: fct_order_payments... run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:16:57.069+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:57 [info     ] Upserted 103886 rows into gold.fct_order_payments
+[2026-10-27T13:16:57.077+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:16:57 [info     ] Loading Fact: fct_order_reviews... run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:17:01.668+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:17:01 [info     ] Upserted 99224 rows into gold.fct_order_reviews
+[2026-10-27T13:17:01.689+0000] {logging_mixin.py:190} INFO - 2026-10-27 13:17:01 [info     ] load_to_gold_success           run_id=manual__2026-10-27T13:07:43+00:00
+[2026-10-27T13:17:01.757+0000] {python.py:240} INFO - Done. Returned value was: None
+[2026-10-27T13:17:01.782+0000] {taskinstance.py:340} INFO - ::group::Post task execution logs
+[2026-10-27T13:17:01.783+0000] {taskinstance.py:352} INFO - Marking task as SUCCESS. dag_id=ecommerce_end_to_end_etl, task_id=load_to_gold, run_id=manual__2026-10-27T13:07:43+00:00, execution_date=20261027T130743, start_date=20261027T131604, end_date=20261027T131701
+[2026-10-27T13:17:01.988+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-10-27T13:17:02.063+0000] {taskinstance.py:3900} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-10-27T13:17:02.065+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
