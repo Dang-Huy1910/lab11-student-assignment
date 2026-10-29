@@ -42,15 +42,23 @@ def extract_to_bronze(**kwargs):
                 
             log.info(f"Extracting {table} to Bronze layer...")
             
-            # Đọc file CSV bằng Polars và ghi sang Parquet
-            df = pl.read_csv(csv_path, ignore_errors=True)
+            # TODO:
+            # 
+            #  Sinh viên thêm code sử dụng thư viện polars (pl) để đọc file CSV từ csv_path 
+            # (Gợi ý: xử lý lỗi khi đọc bằng tham số ignore_errors=True)
+            # Sau đó ghi DataFrame thành file Parquet vào parquet_path.
+            
+            # YOUR CODE HERE
+            # df = ...
+            # df.write_parquet(...)
+            df = pl.read_csv(csv_path, ignore_errors=True, infer_schema_length=10000)
             df.write_parquet(parquet_path)
+            
             
             extracted_tables.append(table)
             log.info(f"Successfully extracted {table}")
             
-        if 'ti' in kwargs and kwargs['ti'] is not None:
-            kwargs['ti'].xcom_push(key="extracted_tables", value=extracted_tables)
+        kwargs['ti'].xcom_push(key="extracted_tables", value=extracted_tables)
         log.info("extract_bronze_success", tables=extracted_tables)
     except Exception as e:
         log.exception("extract_bronze_failed")
@@ -58,4 +66,4 @@ def extract_to_bronze(**kwargs):
 
 if __name__ == "__main__":
     # For local testing
-    extract_to_bronze(ti=type('obj', (object,), {'xcom_push': lambda **kw: None})())
+    extract_to_bronze(ti=type('obj', (object,), {'xcom_push': lambda *args, **kw: None})())

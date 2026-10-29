@@ -1,0 +1,15 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Airflow logs
+logs/
+*.log
+
+# Environment & temporary files
+.env
+.DS_Store
+.idea/
+.vscode/

@@ -287,4 +287,4 @@ def check_quality(**kwargs):
 
 if __name__ == "__main__":
     # For local testing
-    clean_to_silver(ti=type('obj', (object,), {'xcom_push': lambda **kw: None})())
+    clean_to_silver(ti=type('obj', (object,), {'xcom_push': lambda *args, **kw: None})())
