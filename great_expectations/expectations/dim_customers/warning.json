@@ -1,0 +1,48 @@
+{
+  "data_asset_type": null,
+  "expectation_suite_name": "dim_customers.warning",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 1,
+        "max_value": null
+      },
+      "meta": {
+        "notes": "Đảm bảo bảng dim_customers có dữ liệu (ít nhất 1 dòng)"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "customer_id"
+      },
+      "meta": {
+        "notes": "Khóa chính customer_id không được null"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_unique",
+      "kwargs": {
+        "column": "customer_id"
+      },
+      "meta": {
+        "notes": "Khóa chính customer_id phải là duy nhất"
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "customer_state"
+      },
+      "meta": {
+        "notes": "Thông tin bang/tỉnh customer_state không được để trống"
+      }
+    }
+  ],
+  "ge_cloud_id": null,
+  "meta": {
+    "great_expectations_version": "0.18.12"
+  }
+}
+

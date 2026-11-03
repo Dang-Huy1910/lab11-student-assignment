@@ -13,3 +13,9 @@ logs/
 .DS_Store
 .idea/
 .vscode/
+
+# Great Expectations uncommitted files & Data Docs
+great_expectations/uncommitted/
+great_expectations/.ipynb_checkpoints/
+
+

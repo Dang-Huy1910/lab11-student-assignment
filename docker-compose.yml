@@ -21,6 +21,7 @@ x-airflow-common:
     - ./src:/opt/airflow/src
     - ./data:/opt/airflow/data
     - ./data/raw:/opt/airflow/data/raw:ro
+    - ./great_expectations:/opt/airflow/great_expectations
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on:
     &airflow-common-depends-on

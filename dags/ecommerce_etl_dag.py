@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 import sys
 
@@ -73,6 +74,12 @@ with DAG(
         python_callable=load_to_gold
     )
     
+    # 5.1. Great Expectations Checkpoint on Gold Data Mart
+    gx_checkpoint_run_gold = BashOperator(
+        task_id='gx_run_gold_checkpoint',
+        bash_command='cd /opt/airflow && great_expectations checkpoint run my_gold_checkpoint'
+    )
+    
     # 6. Execution Report
     report = PythonOperator(
         task_id='execution_report',
@@ -96,8 +103,8 @@ with DAG(
     # Flow 1: Tuyến tính ban đầu
     start >> extract >> transform >> branch
     
-    # Flow 2 (Nhánh thành công): Tiếp tục load vào Gold, in báo cáo và kết thúc
-    branch >> load >> report >> end
+    # Flow 2 (Nhánh thành công): Tiếp tục load vào Gold, kiểm tra chất lượng với GX, in báo cáo và kết thúc
+    branch >> load >> gx_checkpoint_run_gold >> report >> end
     
     # Flow 3 (Nhánh thất bại): Báo động Data Quality và kết thúc
     branch >> alert >> end
