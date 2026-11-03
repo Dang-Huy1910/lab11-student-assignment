@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
-from airflow.operators.python import PythonOperator, BranchPythonOperator
+from airflow.operators.python import PythonOperator
+from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 import sys
 
@@ -8,13 +9,13 @@ import sys
 sys.path.append('/opt/airflow/')
 
 from src.extract import extract_to_bronze
-from src.transform import clean_to_silver, check_quality
+from src.transform import clean_to_silver
 from src.load import load_to_gold
 
 default_args = {
     'owner': 'data_engineer',
     'start_date': datetime(2023, 1, 1),
-    'retries': 1,
+    'retries': 0,
     'retry_delay': timedelta(minutes=5),
     'email_on_failure': True,
     'email_on_retry': False,
@@ -32,8 +33,9 @@ def print_execution_report(**kwargs):
     print(f"Logical Date: {kwargs['logical_date']}")
     print("Status: SUCCESS ✅")
     print("Pipeline has successfully extracted Data Lake files,")
-    print("passed Data Contracts (Great Expectations),")
-    print("and loaded into PostgreSQL Star Schema Data Mart.")
+    print("transformed and loaded data into Gold PostgreSQL Data Mart,")
+    print("and passed Great Expectations Checkpoint (dim_customers.warning).")
+    print("Data Docs HTML reports updated successfully.")
     print("="*50)
 
 with DAG(
@@ -41,7 +43,7 @@ with DAG(
     default_args=default_args,
     schedule_interval='@daily',
     catchup=False,
-    description='End-to-End ETL for E-commerce Data using Medallion Architecture'
+    description='End-to-End ETL with Great Expectations Quality Check on Gold'
 ) as dag:
     
     # 1. Start task
@@ -61,16 +63,16 @@ with DAG(
         python_callable=clean_to_silver
     )
     
-    # 4. Branching on Data Quality Check
-    branch = BranchPythonOperator(
-        task_id='check_quality',
-        python_callable=check_quality
-    )
-    
-    # 5. Load to Gold Data Mart (PostgreSQL Star Schema)
+    # 4. Load to Gold Data Mart (PostgreSQL Star Schema)
     load = PythonOperator(
         task_id='load_to_gold',
         python_callable=load_to_gold
+    )
+    
+    # 5. Great Expectations Checkpoint validation on Gold tables
+    gx_run_gold_checkpoint = BashOperator(
+        task_id='gx_run_gold_checkpoint',
+        bash_command='cd /opt/airflow && great_expectations checkpoint run my_gold_checkpoint'
     )
     
     # 6. Execution Report
@@ -79,25 +81,12 @@ with DAG(
         python_callable=print_execution_report
     )
     
-    # 7. Alert Quality (khi Data Quality bị vi phạm)
-    alert = EmptyOperator(
-        task_id='alert_quality'
-    )
-    
-    # 8. End task
+    # 7. End task
     end = EmptyOperator(
-        task_id='end',
-        trigger_rule='none_failed'
+        task_id='end'
     )
     
     # =========================================================================
     # Task Dependencies (Dataflow Graph)
     # =========================================================================
-    # Flow 1: Tuyến tính ban đầu
-    start >> extract >> transform >> branch
-    
-    # Flow 2 (Nhánh thành công): Tiếp tục load vào Gold, in báo cáo và kết thúc
-    branch >> load >> report >> end
-    
-    # Flow 3 (Nhánh thất bại): Báo động Data Quality và kết thúc
-    branch >> alert >> end
+    start >> extract >> transform >> load >> gx_run_gold_checkpoint >> report >> end

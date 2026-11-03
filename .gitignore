@@ -13,3 +13,8 @@ logs/
 .DS_Store
 .idea/
 .vscode/
+
+# Great Expectations uncommitted
+great_expectations/uncommitted/validations/
+great_expectations/uncommitted/data_docs/local_site/
+!great_expectations/uncommitted/data_docs/.gitkeep
